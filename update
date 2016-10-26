@@ -21,6 +21,13 @@ fs.readdir(path.join(__dirname, '/bin'), function (err, files) {
     if (build.prerelease && build.prerelease.length > 0) {
       version += '-' + build.prerelease
     }
+
+    // workaround for pre-0.4.0, where prereleases didn't bump the version
+    // NOTE: the text must be lexically after 'nightly'
+    if (semver.major(build.version) === 0 && semver.minor(build.version) < 4) {
+      version += '-workaround'
+    }
+
     if (build.build && build.build.length > 0) {
       version += '+' + build.build
     }
